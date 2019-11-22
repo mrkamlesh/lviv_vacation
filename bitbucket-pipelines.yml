@@ -1,0 +1,27 @@
+# This is a sample build configuration for JavaScript.
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: meetup/node-awscli
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: build app
+          caches:
+            - node
+          artifacts:
+            - build/**
+          script:
+            - npm install
+            - npm run build
+      - step:
+          name: upload to s3
+          script: 
+            - aws s3 sync ./build s3://$S3_BUCKET_PROD
+options:
+   max-time: 10 
+            
+          
